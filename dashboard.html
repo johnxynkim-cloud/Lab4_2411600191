@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackFit - Enhanced Inventory Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background: linear-gradient(90deg, #00A8A8 0%, #52B75A 100%) !important;">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <img src="assets/logo.png" alt="TrackFit Logo" height="40" class="bg-white rounded p-1 shadow-sm">
+                <span class="fw-bold tracking-wide text-white">TRACKFIT INVENTORY</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white fw-medium d-none d-sm-inline" id="userGreeting">Welcome, Admin</span>
+                <button class="btn btn-outline-light btn-sm" id="logoutBtn"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm py-3 border-end">
+                <div class="position-sticky">
+                    <ul class="nav flex-column gap-1">
+                       <li class="nav-item">
+                            <a class="nav-link text-white rounded fw-semibold" style="background-color: #00A8A8 !important;" href="#"></i> Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary rounded" href="#"></i> Workouts</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary rounded" href="#"></i> Nutrition</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary rounded" href="#"></i> Progress</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary rounded" href="#"></i> Profile</a></li>
+                        <li class="nav-item">
+                           <a class="nav-link rounded text-danger" href="index.html" id="sidebarLogoutBtn" style="cursor: pointer;"></i> Logout
+        </a>
+    </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="h3 fw-bold text-dark mb-0">Inventory Analytics & Management</h2>
+                        <p class="text-muted small mb-0">Real-time dynamic stock monitoring and data visualization</p>
+                    </div>
+                    <div>
+                        <button id="exportCsvBtn" class="btn btn-success text-white shadow-sm fw-medium">
+                            <i class="fa-solid fa-file-csv me-1"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div id="alertContainer"></div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-primary h-100">
+                            <div class="card-body">
+                                <div class="text-muted small fw-bold text-uppercase">Total Products</div>
+                                <div class="h3 fw-bold my-1" id="statTotalProducts">0</div>
+                                <span class="text-muted small"><i class="fa-solid fa-box text-primary me-1"></i> Active Items</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-success h-100">
+                            <div class="card-body">
+                                <div class="text-muted small fw-bold text-uppercase">Total Value</div>
+                                <div class="h3 fw-bold my-1" id="statTotalValue">$0.00</div>
+                                <span class="text-muted small"><i class="fa-solid fa-dollar-sign text-success me-1"></i> Stock Worth</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-warning h-100">
+                            <div class="card-body">
+                                <div class="text-muted small fw-bold text-uppercase">Low Stock Alerts</div>
+                                <div class="h3 fw-bold my-1 text-warning" id="statLowStock">0</div>
+                                <span class="text-muted small"><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> Needs Reorder</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm border-start border-4 border-danger h-100">
+                            <div class="card-body">
+                                <div class="text-muted small fw-bold text-uppercase">Out of Stock</div>
+                                <div class="h3 fw-bold my-1 text-danger" id="statOutOfStock">0</div>
+                                <span class="text-muted small"><i class="fa-solid fa-circle-xmark text-danger me-1"></i> Zero Units</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3 fw-bold text-dark d-flex align-items-center justify-content-between">
+                    <span><i class="fa-solid fa-chart-line text-teal me-2"></i> Inventory Trend Over Time</span>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 280px;">
+                        <canvas id="inventoryTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white border-0 py-3 fw-bold text-dark d-flex align-items-center justify-content-between">
+                                <span><i class="fa-solid fa-chart-bar text-teal me-2"></i> Inventory Value by Category</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:280px;">
+                                    <canvas id="categoryValueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white border-0 py-3 fw-bold text-dark">
+                                <i class="fa-solid fa-chart-pie text-teal me-2"></i> Stock Status
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:280px;">
+                                    <canvas id="stockStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 py-3 fw-bold text-dark">
+                                <i class="fa-solid fa-ranking-star text-teal me-2"></i> Top Products by Inventory Value
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:250px;">
+                                    <canvas id="topProductsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label for="searchInput" class="form-label small fw-bold text-muted">Search Inventory</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by name or SKU...">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3">
+                                <label for="categoryFilter" class="form-label small fw-bold text-muted">Filter Category</label>
+                                <select id="categoryFilter" class="form-select">
+                                    <option value="all">All Categories</option>
+                                    <option value="Free Weights">Free Weights</option>
+                                    <option value="Cardio">Cardio</option>
+                                    <option value="Strength">Strength</option>
+                                    <option value="Accessories">Accessories</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3">
+                                <label for="statusFilter" class="form-label small fw-bold text-muted">Stock Status</label>
+                                <select id="statusFilter" class="form-select">
+                                    <option value="all">All Statuses</option>
+                                    <option value="in stock">In Stock</option>
+                                    <option value="low stock">Low Stock</option>
+                                    <option value="out of stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2 d-flex align-items-end">
+                                <button id="resetFiltersBtn" class="btn btn-outline-secondary w-100">
+                                    <i class="fa-solid fa-rotate me-1"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0 text-dark">Inventory Items</h5>
+                        <span class="badge bg-teal" id="tableItemCount">0 items</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total Value</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript Scripts -->
+    <script src="js/dataManager.js"></script>
+    <script src="js/chartConfig.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

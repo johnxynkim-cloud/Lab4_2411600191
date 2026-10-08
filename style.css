@@ -1,0 +1,123 @@
+:root {
+    --theme-primary: #00A8A8;         
+    --theme-secondary: #52B75A;       
+    --theme-background: #F4F9F9;    
+    --theme-light-accent: #E0F2F1;  
+    --theme-accent: #F59E0B;        
+    --theme-text: #222222; 
+}
+
+/* Dashboard Default Page Background */
+body {
+    background-color: var(--theme-background);
+    color: var(--theme-text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Gradient background ONLY for the Login page */
+body.login-page {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%) !important;
+    min-height: 100vh;
+}
+
+/* Gradient Header ONLY on Login Card Header */
+body.login-page .card-header {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%) !important;
+    color: #ffffff !important;
+}
+
+body.login-page .card-header h3, 
+body.login-page .card-header p {
+    color: #ffffff !important;
+}
+
+/* White Navbar and Dashboard Card Headers */
+.navbar,
+.card-header {
+    background-color: #ffffff !important;
+    color: var(--theme-text);
+}
+
+/* Teal background & text utilities */
+.bg-teal {
+    background-color: var(--theme-primary) !important;
+    color: #ffffff;
+}
+
+.text-teal {
+    color: var(--theme-primary) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-teal {
+    background-color: var(--theme-primary) !important;
+    border-color: var(--theme-primary) !important;
+    color: #ffffff !important;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-teal:hover {
+    background-color: #008b8b !important;
+    border-color: #008b8b !important;
+}
+
+/* Branding logo */
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+/* Sidebar navigation */
+.sidebar .nav-link {
+    color: #64748B;
+    padding: 0.6rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar .nav-link:hover, 
+.sidebar .nav-link.active {
+    background-color: var(--theme-light-accent);
+    color: var(--theme-primary) !important;
+}
+
+/* Cards & Tables */
+.card {
+    border-radius: 10px;
+    border: none !important;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.table th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748B;
+}
+
+.highlight-text {
+    background-color: #FEF08A;
+    font-weight: bold;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.low-stock-row {
+    background-color: #FFFBEB !important;
+}
+
+.out-of-stock-row {
+    background-color: #FEF2F2 !important;
+}
